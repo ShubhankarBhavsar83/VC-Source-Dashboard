@@ -6,11 +6,12 @@ A thesis-driven sourcing interface for venture capital deal flow. Built as a tak
 -   GitHub: https://github.com/ShubhankarBhavsar83/VC-Source-Dashboard
 
 # Setup
-Prerequisite,Details
-Node.js,18+
-MongoDB Atlas account,(free tier works)
-Groq API key,"console.groq.com (free, no credit card)"
-Jina AI key (optional),jina.ai for higher scrape rate limits
+| Prerequisite | Details |
+| --- | --- |
+| Node.js | 18+ |
+| MongoDB Atlas account | (free tier works) |
+| Groq API key | console.groq.com (free, no credit card) |
+| Jina AI key (optional) | jina.ai for higher scrape rate limits |
 
 # Environment Variables
 -   Create .env.local in the project root:
@@ -35,19 +36,17 @@ npm run dev
 
 # Core:
 
-+----------------------+--------------------------------------------------------------------------------------------+
-| Feature              | Notes                                                                                      |
-+----------------------+--------------------------------------------------------------------------------------------+
-| Company database     | 20 seeded companies, MongoDB-backed, server-side search + pagination                       |
-| Search & filters     | Full-text search, multi-select stage and sector filters, URL-restorable state              |
-| Live enrichment      | Scrapes company website via Jina Reader, extracts structured data with Groq LLaMA 3.3 70B  |
-| Thesis scoring       | Score companies 1–100 against a custom investment thesis with matched/missing criteria     |
-| Enrichment history   | Every enrichment run is stored per-thesis — compare scores across multiple theses          |
-| Notes                | Per-company analyst notes, persisted to MongoDB                                            |
-| Lists                | Create named lists, bulk-add companies, export as CSV or JSON                              |
-| Saved searches       | Save and re-run filter combinations                                                        |
-| Global search        | ⌘K / Ctrl+K keyboard shortcut, live results with 250ms debounce                           |
-+----------------------+--------------------------------------------------------------------------------------------+
+| Feature | Notes |
+| --- | --- |
+| Company database | 20 seeded companies, MongoDB-backed, server-side search + pagination |
+| Search & filters | Full-text search, multi-select stage and sector filters, URL-restorable state |
+| Live enrichment | Scrapes company website via Jina Reader, extracts structured data with Groq LLaMA 3.3 70B |
+| Thesis scoring | Score companies 1–100 against a custom investment thesis with matched/missing criteria |
+| Enrichment history | Every enrichment run is stored per-thesis — compare scores across multiple theses |
+| Notes | Per-company analyst notes, persisted to MongoDB |
+| Lists | Create named lists, bulk-add companies, export as CSV or JSON |
+| Saved searches | Save and re-run filter combinations |
+| Global search | ⌘K / Ctrl+K keyboard shortcut, live results with 250ms debounce |
 
 # Power-User Touches:
 -   Bulk actions: Select multiple companies in the table, add to list or export in one click.
@@ -64,19 +63,17 @@ npm run dev
 
 # Stack:
 
-+---------------+-----------------------------------------------+
-| Layer         | Choice                                        |
-+---------------+-----------------------------------------------+
-| Framework     | Next.js 15 (App Router)                       |
-| Language      | TypeScript                                    |
-| UI            | MUI v5 + MUI DataGrid v7                      |
-| State         | Zustand (persisted to localStorage)           |
-| Database      | MongoDB via Mongoose v8                       |
-| Scraping      | Jina Reader (r.jina.ai)                       |
-| AI Extraction | Groq (primary) -> Gemini -> OpenAI            |
-| Fonts         | DM Sans + IBM Plex Mono                       |
-| Deploy        | Vercel                                        |
-+---------------+-----------------------------------------------+
+| Layer | Choice |
+| --- | --- |
+| Framework | Next.js 15 (App Router) |
+| Language | TypeScript |
+| UI | MUI v5 + MUI DataGrid v7 |
+| State | Zustand (persisted to localStorage) |
+| Database | MongoDB via Mongoose v8 |
+| Scraping | Jina Reader (r.jina.ai) |
+| AI Extraction | Groq (primary) -> Gemini -> OpenAI |
+| Fonts | DM Sans + IBM Plex Mono |
+| Deploy | Vercel |
 
 # Data flow — enrichment:
 
@@ -91,13 +88,11 @@ npm run dev
 
 # API routes
 
-+---------------------+------------+----------------------------------------+
-| Route               | Methods    | Purpose                                |
-+---------------------+------------+----------------------------------------+
-| /api/companies      | GET        | List with search, filter, pagination   |
-| /api/companies/[id] | GET, PATCH | Fetch or update a single company       |
-| /api/enrich         | POST       | Scrape + extract + score + cache       |
-+---------------------+------------+----------------------------------------+
+| Route | Methods | Purpose |
+| --- | --- | --- |
+| `/api/companies` | `GET` | List with search, filter, pagination |
+| `/api/companies/[id]` | `GET`, `PATCH` | Fetch or update a single company |
+| `/api/enrich` | `POST` | Scrape + extract + score + cache |
 
 # Key Engineering Decisions:
 -   Enrichment history per thesis: Rather than overwriting a single enrichment field, each run appends an EnrichmentRecord to enrichmentHistory[] tagged with the thesis ID. This lets analysts compare how the same   company scores against different theses over time.
@@ -111,40 +106,44 @@ npm run dev
 
 # Project Structure
 
-src/
-├── app/
-│   ├── api/
-│   │   ├── companies/
-│   │   │   ├── route.ts          # GET /api/companies
-│   │   │   └── [id]/route.ts     # GET, PATCH /api/companies/[id]
-│   │   └── enrich/route.ts       # POST /api/enrich
-│   ├── companies/
-│   │   ├── page.tsx              # Company table with bulk actions
-│   │   └── [id]/page.tsx         # Company profile + enrichment tabs
-│   ├── lists/
-│   │   ├── page.tsx              # List management
-│   │   └── [id]/page.tsx         # List detail with export
-│   ├── saved/page.tsx            # Saved searches
-│   ├── AppShell.tsx              # Root layout with sidebar
-│   └── layout.tsx
-├── components/
-│   ├── layout/
-│   │   ├── AppShell.tsx          # Sidebar, nav, search trigger
-│   │   ├── GlobalSearch.tsx      # ⌘K search overlay
-│   │   └── ThesisPanel.tsx       # Thesis creation + switching
-│   ├── companies/
-│   │   ├── StageChip.tsx
-│   │   └── ScoreBadge.tsx
-│   └── enrichment/
-│       ├── EnrichmentHistory.tsx # Collapsible per-thesis history cards
-│       └── EnrichmentPanel.tsx
-├── lib/
-│   ├── mongodb.ts                # Connection singleton
-│   ├── models/Company.ts         # Mongoose schema
-│   ├── seed.ts                   # 20 mock companies
-│   └── theme.ts                  # Dark MUI theme
-├── store/index.ts                # Zustand store
-└── types/index.ts                # Shared TypeScript types
+- **`src/`**
+  - **`app/`**
+    - **`api/`**
+      - **`companies/`**
+        - `route.ts` — GET `/api/companies`
+        - `[id]/route.ts` — GET, PATCH `/api/companies/[id]`
+      - **`enrich/`**
+        - `route.ts` — POST `/api/enrich`
+    - **`companies/`**
+      - `page.tsx` — Company table with bulk actions
+      - `[id]/page.tsx` — Company profile + enrichment tabs
+    - **`lists/`**
+      - `page.tsx` — List management
+      - `[id]/page.tsx` — List detail with export
+    - **`saved/`**
+      - `page.tsx` — Saved searches
+    - `AppShell.tsx` — Root layout with sidebar
+    - `layout.tsx`
+  - **`components/`**
+    - **`layout/`**
+      - `AppShell.tsx` — Sidebar, nav, search trigger
+      - `GlobalSearch.tsx` — ⌘K search overlay
+      - `ThesisPanel.tsx` — Thesis creation + switching
+    - **`companies/`**
+      - `StageChip.tsx`
+      - `ScoreBadge.tsx`
+    - **`enrichment/`**
+      - `EnrichmentHistory.tsx` — Collapsible per-thesis history cards
+      - `EnrichmentPanel.tsx`
+  - **`lib/`**
+    - `mongodb.ts` — Connection singleton
+    - `models/Company.ts` — Mongoose schema
+    - `seed.ts` — 20 mock companies
+    - `theme.ts` — Dark MUI theme
+  - **`store/`**
+    - `index.ts` — Zustand store
+  - **`types/`**
+    - `index.ts` — Shared TypeScript types
 
 
 
