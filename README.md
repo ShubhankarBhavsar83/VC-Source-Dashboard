@@ -3,17 +3,14 @@ A thesis-driven sourcing interface for venture capital deal flow. Built as a tak
 
 # Live Demo
 -   Deployed URL: [add Vercel URL here]
--   GitHub: [add repo URL here]
+-   GitHub: https://github.com/ShubhankarBhavsar83/VC-Source-Dashboard
 
 # Setup
-+-------------------------+-----------------------------------------------------+
-| Prerequisite            | Details                                             |
-+-------------------------+-----------------------------------------------------+
-| Node.js                 | 18+                                                 |
-| MongoDB Atlas account   | (free tier works)                                   |
-| Groq API key            | console.groq.com (free, no credit card)             |
-| Jina AI key (optional)  | jina.ai for higher scrape rate limits               |
-+-------------------------+-----------------------------------------------------+
+Prerequisite,Details
+Node.js,18+
+MongoDB Atlas account,(free tier works)
+Groq API key,"console.groq.com (free, no credit card)"
+Jina AI key (optional),jina.ai for higher scrape rate limits
 
 # Environment Variables
 -   Create .env.local in the project root:
@@ -160,7 +157,7 @@ src/
 - Keyboard-first search (`Ctrl + K`)
 - Idempotent enrichment writes
 
-# Not implemented
+# Future Scope
 
 - Vector similarity search / embeddings
 - Background job queue for enrichment
