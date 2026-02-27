@@ -2,7 +2,7 @@
 A thesis-driven sourcing interface for venture capital deal flow. Built as a take-home assignment.
 
 # Live Demo
--   Deployed URL: [add Vercel URL here]
+-   Deployed URL: https://vc-source-dashboard-8kuz.vercel.app/
 -   GitHub: https://github.com/ShubhankarBhavsar83/VC-Source-Dashboard
 
 # Setup
